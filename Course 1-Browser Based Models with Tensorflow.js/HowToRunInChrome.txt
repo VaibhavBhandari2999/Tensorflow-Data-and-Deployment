@@ -1,0 +1,14 @@
+<!--
+You will need to run a web server locally on your machine. This is because in javascript every call has to be done through and HTTP request. Therefore, even if you have your files locally, you can't just load them directly, you have to make an HTTP request to those files. This is what the Web Server for Chrome App is used for.
+
+
+Step 1 - Open the Chrome browser and go to the Chrome apps (chrome://apps/):
+
+Step 2 - Click on Web server icon to launch it. (which we download from Chrome Apps - Web Server for Chrome)
+
+Step 3 - Click on "CHOOSE FOLDER" and select the folder that contains the examples or exercises you want to run. For this example, we are going to run the iris.html file.
+
+Step 4 - Once you have chosen the correct folder, you can click on the Web Server URL (http://127.0.0.1:8887).
+
+Step 5 - Once you click on the Web Server URL, this will open a new tab in your Chrome browser. You can now click on 
+the html file you want to run. In this case, we are going to run the iris-classifier.html file.

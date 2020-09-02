@@ -1,0 +1,120 @@
+<!--Firstly, the IRIS dataset is used here for multi class classification
+It has 4 atttributes - Sepal Length, Speal Width, Petal Length, Petal Width and Species. Excep species, all are foats
+
+
+The first line should contain the column names (without these, we wont be able to use a lot if Tensorflow shortcuts)
+
+The rest should be 5.2,3.5,1.4,0.2,setosa
+
+
+They are all in text, so we will have to remix these to numbers to put them in the neuron
+-->
+
+
+<html>
+    <head>
+        
+    </head>
+    <!--<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest"></script>-->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs/dist/tf.min.js"></script>
+    
+    <script>
+        async function run(){       
+            const csvUrl = 'iris.csv';          //CSV is at a URL. As the JS doesnt have server details, it looks for it in the same directory as the webpahe hosting it. But it doesnt load it form File System directly. Its going through HTTP stack to get the file, so we need to run this code on a Web Server
+            
+            //Brackets IDE has a built-in web server which i am using
+            const trainingData = tf.data.csv(csvUrl, {
+                columnConfigs: {
+                    species: {                  //Tensorflow doesnt know from the file, wahat the features and labels are, so we have to flag which column be treated as labels
+                        isLabel: true
+                    }
+                    //Also we notice 'species' is hard coded and recognized. In the CSV, 'species' is the column definition for the last column where we have the label. (which is why we should not remove column names from 1st line of CSV)
+                }
+            });
+            
+            
+            const numOfFeatures = (await trainingData.columnNames()).length - 1;
+            const numOfSamples = 150;
+            
+            //Data comes back from tf.data.csv as dictionaries, and for trainig we need to convert it into arrays. We also need to convert Strings defined in the labels to One Hot Encoded array of label values using One Hot Encoding (because NN cant operate on strings)
+            
+            //To do this we call map method of the dictionaryand tell it that we want set of xs and ys back
+            const convertedData =
+                  trainingData.map(({xs, ys}) => {
+                      const labels = [                          //The column we specified as a label (species column) is in the set of ys and we can process that set to create an array of values (here, creating an array of 3 values per label), the values of the label will be two 0s and a one, with the position of the one based on the spcies
+                          
+                            ys.species == "setosa" ? 1 : 0,                 //Setosa will be 100
+                            ys.species == "virginica" ? 1 : 0,              //Virginic will be 010
+                            ys.species == "versicolor" ? 1 : 0              //Versicolor will be 001
+                      ] 
+                      return{ xs: Object.values(xs), ys: Object.values(labels)};        //Values that weren't flagged as labels were in the xs set, so Object.values(xs) will geive back an array of array of their values. Each row in the dataset had 4 features, giving a 4x1 array, these are then loaded in an array of length number of rows in the dataset
+                      //We do the same thing for ys, which also return array of arrays. First row will be 100/010/001 depending on species. and this will be loaded in an array of length number of rows in the dataset
+                      
+                      //In One Hot Encoding, one of the elements in the array is Hot (1)
+                  }).batch(10);
+            
+            //So the NN used fo this will have input layer wuth 4 nodes(we have 4 values of x), one hidden layer and one outpuut layer with 3 nodes(one for each type of flower)
+            
+            const model = tf.sequential();
+            model.add(tf.layers.dense({inputShape: [numOfFeatures], activation: "sigmoid", units: 5}))      //Hidden layer has 5 neurons. By specifying inputShape as number of features (which is 4), we are doing what Flatten function did in Python
+            model.add(tf.layers.dense({activation: "softmax", units: 3}));      //3 neurons for output layer, activating them with a softmax function to get the probability that the pattern will match the neuron for that class of flower
+            
+            model.compile({loss: "categoricalCrossentropy", optimizer: tf.train.adam(0.06)});//Learning rate is 0.06
+
+            
+            //To actually do the training we use model.fitDataset
+            
+            await model.fitDataset(convertedData,           //We are using fitDataset here, in place of fit(), we pass the data in as the first parameter(convertedData), and then pass list of JSON style name values as second parameter
+                             {epochs:100,
+                              callbacks:{ //In python we had a custom callback class. Here we can just specify the callback in the list. Definition of callback is itself a list, with list item inEpochEnd being a function. This is a poerful application of JS, where we can add functions as list items. onEpochEnd gets the epoch and logs for that epoch, which we print out
+                                  onEpochEnd: async(epoch, logs) =>{
+                                      console.log("Epoch: " + epoch + " Loss: " + logs.loss);
+                                  }
+                              }});
+            
+            
+             // Test Cases:
+            
+            //If we want to use the model for inference and get a prediction, we can create an input tensor with feature values and pass it to the predict method of the model
+            // Setosa
+            const testVal = tf.tensor2d([4.4, 2.9, 1.4, 0.2], [1, 4]);      //Declared as a tensor2D with arrray of 4 values, and then shape of the array
+            
+            // Versicolor
+            // const testVal = tf.tensor2d([6.4, 3.2, 4.5, 1.5], [1, 4]);
+            
+            // Virginica
+            // const testVal = tf.tensor2d([5.8,2.7,5.1,1.9], [1, 4]);
+            
+            const prediction = model.predict(testVal);      //When we pass the tensor2d to the predict method, we get a tensor back with preidction in it
+            const pIndex = tf.argMax(prediction, axis=1).dataSync();
+            s
+            const classNames = ["Setosa", "Virginica", "Versicolor"];
+            
+            // alert(prediction)
+            alert(classNames[pIndex])
+        }
+        run();  	               //Command to start the whole program
+  
+    </script>
+    <body>
+        IRIS dataset multiclass classification
+    </body>
+</html>
+
+
+
+
+<!--
+You will need to run a web server locally on your machine. This is because in javascript every call has to be done through and HTTP request. Therefore, even if you have your files locally, you can't just load them directly, you have to make an HTTP request to those files. This is what the Web Server for Chrome App is used for.
+
+
+Step 1 - Open the Chrome browser and go to the Chrome apps (chrome://apps/):
+
+Step 2 - Click on Web server icon to launch it. (which we download from Chrome Apps - Web Server for Chrome)
+
+Step 3 - Click on "CHOOSE FOLDER" and select the folder that contains the examples or exercises you want to run. For this example, we are going to run the iris.html file.
+
+Step 4 - Once you have chosen the correct folder, you can click on the Web Server URL (http://127.0.0.1:8887).
+
+Step 5 - Once you click on the Web Server URL, this will open a new tab in your Chrome browser. You can now click on 
+the html file you want to run. In this case, we are going to run the iris-classifier.html file.

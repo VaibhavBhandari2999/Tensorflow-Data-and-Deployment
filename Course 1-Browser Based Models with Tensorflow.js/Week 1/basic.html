@@ -1,0 +1,62 @@
+<!-- We are taking a very simple NN here to just predict y=mx+c-->
+   
+
+   
+<html>
+    <head>
+        
+    </head>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest"></script>    <!-- Load Tensorflow.js file-->
+    
+    <!--Building the Model-->
+    <script>
+        
+        //Function which we call later
+        async function doTraining(model){
+            const history = 
+                  await model.fit(xs, ys,                                   //Actuak function to do the training(similar) to python, we fit the xs to the ys. As its an async operation, we 'await' the result.
+                                  //Rest of the parameters to fit is a JSON list
+                        { epochs: 500,
+                          callbacks:{                                       //In python we had a custom callback class. Here we can just specify the callback in the list. Definition of callback is itself a list, with list item inEpochEnd being a function. This is a poerful application of JS, where we can add functions as list items. onEpochEnd gets the epoch and logs for that epoch, which we print out
+                              onEpochEnd: async(epoch, logs) =>{
+                                  console.log("Epoch:" 
+                                              + epoch 
+                                              + " Loss:" 
+                                              + logs.loss);
+                                  
+                              }
+                          }
+                        });
+        }
+        
+        const model = tf.sequential();      //We say our model is sequential(sequence of layers)
+        model.add(tf.layers.dense({units: 1, inputShape: [1]}));//Simplest possible NN is 1 layer with 1 neuron, so we're only adding 1 dense layer to our sequence. This dense layer has only 1 neuron in it as we can see from units:1
+        model.compile({loss:'meanSquaredError',              //The loss function is MSE, which works well in a linear relationship like this one              
+                       optimizer:'sgd'});           //SGD is stochastic gradient descent
+        model.summary();
+        //In the summary, there will be 2 parameters, thats because each neuron is trying to find a weight and a bias
+        
+        //Data used to train the NN
+        //Unlike python, we define it as a tensor2D instead on numpy array(we dont have numpy in JS)
+        //In tensor2D, we have 2D array or two 1D arrays, So, we see, that our training value are in 1 array, 2nd array is shape of those training values [6,1]
+        const xs = tf.tensor2d([-1.0, 0.0, 1.0, 2.0, 3.0, 4.0], [6, 1]);
+        const ys = tf.tensor2d([-3.0, -1.0, 2.0, 3.0, 5.0, 7.0], [6, 1]);
+
+        
+        //Training should be an async function because it takes indeterminate time to complete, so instead of locking the browser till its done, it calls us once its done
+        doTraining(model).then(() => {              //doTraining is the async function. We pass the model you just created.
+            alert(model.predict(tf.tensor2d([10], [1,1])));
+        });
+        //When it calls back, the  model is trained and we can call model.predict, we try to predict the value for 10, We pass it again as a tensor2D, first being the value as an array, 2nd being the size of the array
+    </script>    
+    <body>
+        <h1> First HTML Page</h1>
+    </body>
+</html>
+
+
+
+
+
+<!--To run it , open the HTML file in the browser and open the Console to see the epochs and loss (Cntrl+Shift+I)
+The result will be in a pop up box-->

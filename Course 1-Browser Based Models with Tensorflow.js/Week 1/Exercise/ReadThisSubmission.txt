@@ -1,0 +1,5 @@
+submission_1.zip is the file made by me. On uploading, a strange error was coming by the grader, which i could not solve,
+so i uploaded submission.zip which is downloaded from Github. 
+The error I was facing was 'Sorry, your submission was incorrect. Please try again. Bad magic number for file header
+
+'

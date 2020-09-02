@@ -1,0 +1,53 @@
+This week we are doing image processing in JS with CNNs. They are similar to CNNs in python with some syntactical changes you need to fo.
+
+The bigger impact lies outside of the model definition, with the code that you'll need to write to do things for example like getting the images for training and processing an image for classification. 
+
+This week we'll take a look at some of that, by training convolutional neural networks for image classification in the browser, and then writing a browser app that takes these images and passes them to the classifier. We'll start by looking at creating the model using JavaScript. 
+
+
+In tensorflow.js there's a cool library calles tfvis which we can use to render the ouputs of your callbacks
+
+
+The MNIST dataset is huge. While loading them in python from the file system, there's no issue, but when you're training in the browser,
+you're making an HTTP call(through Web Server for Chrome app) to get each image, and that amounts to a huge amount of calls, which is bad.
+
+One solution to this is to use something Game Devs use often, where they get all their graphics and stitch them together into a 'sprite sheet'.
+Here, we'll see how to download a sigle image containing all 70,000 images in the dataset and then we'll slice that up into individual images and put them in arrays, which we can then pass to the model to train it.
+
+The MNIST Sprite sheet is at https://storage.googleapis.com/learnjs-data/model-builder/mnist_images.png.
+This URL contains an image that's 65000 pixels tall with 1 pixel for each image in the dataset. The width of the image is 784 pixels which is what we get when we flatten the 28x28 array
+
+The labels are found at a different URL  https://storage.googleapis.com/learnjs-data/model-builder/mnist_labels_uint8. When we visit this URL, nothing will render in the browser, but a file will download. The file is 650,000 bytes in size, which means its 10 bytes per image. In the 10 bytes per label, 9 bytes are 0s, 1 bytes is 1 (similar to One Hot Encoding).
+
+All this is handled in the data.js file. In the file, there's a class called MNISTData which has 3 main methods that are called publically.
+1) async load(){} - which downloads the sprite sheet and slices it. It also downloads the labels and decodes them. It also has a helper function called nextBatch which is used to batch them according to the specified train and test batch sizes
+2) nextTrainBatch(){} - Which gets the next batch of training data(slices of the sprite sheet image according to the desired batch size). Note that it keeps them as 1x784 pixels and the calling function can then resize them to 28x28. It also returns the appropriate labeled data
+3) nextTestBatch(){} - Does the same as nextTrainBatch() but for testing data
+
+Then, in order to initialize the data class and load the sprite getting it ready for batching, you need to add 
+
+const data=new MNISTData();
+await data.load();
+
+The above snippet is in run() function of script.js file, not data.js.
+
+Once we have a loaded instance of data, we can now get the batches and resize them to the desired 28x28 like this
+
+
+	const [trainXs, trainYs] = tf.tidy(() => {
+		const d = data.nextTrainBatch(TRAIN_DATA_SIZE);
+		return [
+			d.xs.reshape([TRAIN_DATA_SIZE, 28, 28, 1]),
+			d.labels
+		];
+	});
+
+	const [testXs, testYs] = tf.tidy(() => {
+		const d = data.nextTestBatch(TEST_DATA_SIZE);
+		return [
+			d.xs.reshape([TEST_DATA_SIZE, 28, 28, 1]),
+			d.labels
+		];
+	});
+
+The above code snippet is in train() function of script.js files, not data.js

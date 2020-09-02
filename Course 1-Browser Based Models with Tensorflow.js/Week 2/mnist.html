@@ -1,0 +1,18 @@
+<html>
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest"></script>        <!--to include tensorflow.js-->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-vis"></script><!--To include tensorflow.js 's visualization library-->
+
+</head>
+<body>
+    <h1>Handwriting Classifier!</h1>
+    <canvas id="canvas" width="280" height="280" style="position:absolute;top:100;left:100;border:8px solid;"></canvas><!--On which something is to be drawn. Its 280x280 as its 10 times the size of the image(which we took as 28x28), so scaling down can be accurate. This is where we draw the digit to be classified-->
+    <img id="canvasimg" style="position:absolute;top:10%;left:52%;width=280;height=280;display:none;"><!--To draw something on the canvas, we create an image id, which is actually hidden and we're going to copy the bits form the canvas to that image and load them out of that image to convert them to a tensor to be used for classification-->
+    <input type="button" value="classify" id="sb" size="48" style="position:absolute;top:400;left:100;">
+    <input type="button" value="clear" id="cb" size="23" style="position:absolute;top:400;left:180;">
+    <script src="data.js" type="module"></script>
+    <script src="script.js" type="module"></script>
+    <!--Then we have 2 buttons, one for classifying and one for clearing the canvas, and we have 2 scripts. The first one is data.js which has  the MNIST class(downloads the sprite, slices it up, downloads the labels, slices them up and gives batches which we can then load into the classifier )
+    Script.js has everything else-handling the canvas, onference and training--> 
+</body>
+</html>

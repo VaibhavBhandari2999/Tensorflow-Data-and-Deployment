@@ -1,0 +1,20 @@
+Architecture of tensorflow.js
+
+Its designed to run in the browser and a Node.js server
+
+					Layers API
+					    |
+					 Core API
+				____________|___________
+				|			|
+			      Browser		      Node.js
+				|		    ____|_________
+			     WebGL		    |   |         |
+						TF-CPU	TF-GPU    TF-TPU
+
+Layers API is friendly high level API like keras API in tensorflow, but we use JS instead of python
+The Core APIs are the low level APIs, designed to work with Tensorflow saved model format, which can be used across Python APIs, JS APIs and even Tensorflow Lite APIs
+
+The Core API then works with the browser, and can take advantage of WebGL for accelerated trainingand inference
+
+Also, on Node.js, we can build server side or terminal applications using it. These can take advantage of CPUs/GPUs/TPUs depending on your machine
