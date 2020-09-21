@@ -12,3 +12,16 @@ The models are located at https://github.com/tensorflow/tfjs-models. There are i
 Today, we are using the toxicity classifier which detects whether text contains threats, obscenities, insults etc. It was trained on 2 million English comments which were already labeled in this way.
 
 Its located at https://github.com/tensorflow/tfjs-models/tree/master/toxicity
+
+_______________________________________________________________________________________________________________________________________________________________________________________________________________________________________
+
+let's take a look at another image classification library called MobileNet. 
+MobileNet is a small low-latency, low-power model, parameterized to meet the resource constraints of a variety of use cases. 
+There are several versions but they can be built upon for classification, detection, embeddings, and other segmentation similar to how other popular large-scale models, such as Inception are used. 
+
+MobileNets trade-off between latency, size, and accuracy while comparing favorably with popular state of the art models. 
+MobileNets are trained to recognize a thousand classes, and at http://bit.ly/mobilenet-labels OR http://www.laurencemoroney.com/wp-content/uploads/2019/04/labels.txt the supported classes are mentioned
+
+We run this using the 'Web Server for Chrome application'. There, we give the location of the directory containing the mobilenet.html and the image file. 
+Then click on the URL in the Web Server for Chrome application (http://127.0.0.1:8887). Then when the folder directory opens in chrome, we click on the mobilenet.html file to run it.
+If we just open it by double clicking the file in file explorer, it won't work

@@ -1,0 +1,36 @@
+<!-- We run this using the 'Web Server for Chrome application'. There, we give the location of the directory containing the mobilenet.html and the image file. Then click on the URL in the Web Server for Chrome application (http://127.0.0.1:8887). Then when the folder directory opens in chrome, we click on the mobilenet.html file to run it. 
+
+If we just open it by double clicking the file in file explorer, it won't work-->
+
+
+<html>
+<head>
+<!-- Include the script for tensorflow.js and mobilenet. Note its not tfjs@latest here -->
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.0.1"> </script>
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet@1.0.0"> </script> 
+</head>
+<body><!-- In this example we use mobilenet to classify the image in the page and a div to display that classification -->
+    <img id="img" src="coffee.jpg"></img>
+    <div id="output" style="font-family:courier;font-size:24px;height=300px"></div>
+</body>
+<script>
+    //This script should be after the body tag, as it should execute only after the page has been loaded OR we can call it when the DOM has finished loading(not what we are doing here)
+    const img = document.getElementById('img');//Creates a variable representing the image tag on the page. If this line executes before DOM has loaded, the program will crash
+    const outp = document.getElementById('output');
+    mobilenet.load().then(model => {//Mobilenet is stored in JSON, its easy to load the object asynchronously and when it is full loaded then the model will be ready for us to use
+        //Later in this week, we'll see how to convert models to JSON format for easy use in the browsers
+        
+        
+        model.classify(img).then(predictions => {//We pass the image as a parameter to the model's classifying function, then we get back a set of predictions
+            console.log(predictions);//which we then print out to the console
+            //This will show us the class name(cofee/expresso/cup/table..) and the probability that the image matches that class.
+            //However, the sum of probabilties for the different classes don't add up to 1. This is because there are a 1000 classes and the sum of probabilities of all 1000 of them add up to 1, but the console doesn't print all 1000 of them, it justs prints the top 3
+            
+            //We loop through the predictions from 0 to the looplength
+            for(var i = 0; i<predictions.length; i++){
+                outp.innerHTML += "<br/>" + predictions[i].className + " : " + predictions[i].probability;
+            }
+        });
+    });
+</script>
+</html>

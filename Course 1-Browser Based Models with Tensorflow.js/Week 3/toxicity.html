@@ -1,0 +1,29 @@
+<!--We use a pre-built toxicity model for this simple example-->
+<html>
+<head>
+<!--The 2 scripts to load tensorflow.js and the toxicity model-->
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest"></script>
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/toxicity"></script><!-- The best way to find these models are to look at the github repo(which is wrote in the info.txt file) and just explore it-->
+<script>
+const threshold = 0.9;                      //The minimum prediction confidence (if a prediction comes in over this bvalue, we'll match it). Every prediction has 2 probability values, insult and not-insult. P(insult)+P(not-insult)=1.
+    //If not-insult value is greather than threshold, its matched as not an insult. If insult value is greater than threshold, its matched as an insult. If both of the values[0.45,0.55] are lesser tham threshold, the toxicity is matched to null.
+    
+toxicity.load(threshold).then(model => {//Load the model, passing the threshold value to initialize it. then(model returns a model . then is like a return type. See https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/then
+    const sentences = ['you suck'];      //Array of sentences to classify
+    model.classify(sentences).then(predictions => {//This array is passed to the model.classify() function, which returns a set of predictions back which we can handle
+        console.log(predictions);       //We see that there are 7 different labels of prediction, each of these have a seperate result of probabilities and a match(null/insult/not-insult)
+        
+        //To iterate through the full list of predictions. There are 7 o fthem
+        for(i=0; i<7; i++){
+            if(predictions[i].results[0].match){//If the match is true (not null or false) for a toxic behaviour, we yhen print out which toxic behavoiur it is, and teh probability of it
+                console.log(predictions[i].label + 
+                            " was found with probability of " + 
+                            predictions[i].results[0].probabilities[1]);                
+            }  
+        }
+    });
+});
+</script> 
+</head>
+<body></body>
+</html>    
