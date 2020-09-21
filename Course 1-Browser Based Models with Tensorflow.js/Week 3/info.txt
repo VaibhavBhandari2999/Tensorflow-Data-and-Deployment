@@ -1,0 +1,14 @@
+We'll learn how to take a model that's been trained in TensorFlow in Python and run that in a web browser, in TensorFlow.js.
+Today, a lot of models are still trained in a data center using TensorFlow, so how do we run that in a browser.
+There's actually a suite of tools in TensorFlow called TensorFlow.js in Python that you can use to then convert your TensorFlow saved models into JSON notation.
+
+This week 2 models are considered. One is a model for sentence toxicity, other one is Mobilenet for image classification.
+Mobilenet is designed to run on low resource environments, but its good to train it on a big data center, convert it and then use it on a browser. This is good for privacy and saving round-trips
+
+In week 1 and 2, we learnt how to run models in the browser, use images to train a CNN on them, visualization libraries, combine many images into 1 to save opning many HTTP connections, tf.tidy() etc.
+This week, we're going to use existing models, not training them on our own, a lot of them are available open source. We'll also see some scripts that convert the pre-trained model into a format which is usable by JS.
+
+The models are located at https://github.com/tensorflow/tfjs-models. There are imae classifiers, audio-speech recognition and even some text utilities.
+Today, we are using the toxicity classifier which detects whether text contains threats, obscenities, insults etc. It was trained on 2 million English comments which were already labeled in this way.
+
+Its located at https://github.com/tensorflow/tfjs-models/tree/master/toxicity
