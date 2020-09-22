@@ -1,0 +1,22 @@
+This week, we summarize everything we learnt in previous weeks into a project. We build an application in our browser which uses a webcam to 
+classify hand gestures(rock/paper/scissors) that a person will show to the webcam.
+The application will capture frames from a webcam, classify those frames, then give out a classification.
+
+In week 3, we saw how to take some pre-trained models in JSON format and use them before finally looking into how to convert python models into JSON so that 
+they are usable in the browser itself. So the training happens in python, the inference happens in the browser.
+
+In this application too, we use an pre-existing trained mobile-net and freeze a few layers, and train a NN using the features extracted from the mobile-net.
+We capture images from the webcam, sort these into desired classes and then with transfer learning, build a new model that classifies these images.
+___________________________________________________________________________________________________
+
+First, a simple web page has to be built, which contains a video dev in whic.
+This page will render a live stream of the webcam. It will also initialize everything you need to start capturing from the webcam and 
+converting that data into tensors, which will then be used to train the network.
+The page is retrain.html
+
+The type of transfer learning being used in this project(its not the conventional method of transfer learning) --
+	Instead of adding a new densely connected set of layers underneath the frozen layers from the original model, we will create a new model. 
+	With its input shape being the output shape of the desired mobile net layer. We then treat this as a separate model that we train. 
+	At prediction time, we'll then get a prediction from our truncated mobile net up to the layer that we wanted to give us a set of embeddings. 
+	We'll then pass those embeddings through the new model in order to get a prediction that the new model was trained on. 
+

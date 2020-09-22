@@ -1,14 +1,16 @@
 <html>
 <head>
-<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest"> </script>   
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest"> </script> <!-- Load Tensorflow.js-->
 <script>
     async function run(){
-        const MODEL_URL = 'http://127.0.0.1:8887/model.json';
-        const model = await tf.loadLayersModel(MODEL_URL);
-        console.log(model.summary());
-        const input = tf.tensor2d([10.0], [1,1]);
+        const MODEL_URL = 'http://127.0.0.1:8887/model.json';//The URL of the model. It has to be loaded via HTTP. So even though its in the same directory it has to be loaded via the URL.
+        //^THIS IS VERY IMPORTANT
+        const model = await tf.loadLayersModel(MODEL_URL);//To get the JSON and turn it into a model which is usable in the browser, we use the loadLayersModel() function. We await the function, as we can't proceed until it has properly called the model.
+        console.log(model.summary());//Prints the summary of the model(number of layers, type of layers, input shape.....)
+        const input = tf.tensor2d([10.0], [1,1]);//Input to the model is via a tensor as we saw in week 1
+        //We want to predict the value for 10. So to do that, we have a two-dimensional tensor with the first dimension being the value to classify and the second being the dimension of that value, in this case one by one. We then get the results by calling model.predict and passing it the inputs. 
         const result = model.predict(input);
-        alert(result)
+        alert(result)//We then alert(pop box/alert box) the result
 	}
 	run();
 </script>
