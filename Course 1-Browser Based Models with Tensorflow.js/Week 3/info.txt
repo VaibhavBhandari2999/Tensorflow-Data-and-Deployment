@@ -25,3 +25,24 @@ MobileNets are trained to recognize a thousand classes, and at http://bit.ly/mob
 We run this using the 'Web Server for Chrome application'. There, we give the location of the directory containing the mobilenet.html and the image file. 
 Then click on the URL in the Web Server for Chrome application (http://127.0.0.1:8887). Then when the folder directory opens in chrome, we click on the mobilenet.html file to run it.
 If we just open it by double clicking the file in file explorer, it won't work
+
+_______________________________________________________________________________________________________________________________________________________________________________________________________________________________________
+
+
+We saw existing pre-trained models that became very easy for you to use in JavaScript in the browser. 
+In this part, we'll see how to build them, train them using Python, and then convert them into JavaScript using tooling.
+
+We'll build the very basic NN we built in week 1 where we fit numbers to each other in a relationship where y=2x-1
+
+The NN is only 1 layer, with 1 unit trained with stochastic gradient descent and MSE loss.
+We give input as 6 X vaues and 6 Y values and train it for 500 epochs.
+Then we give it a X value (10.0) for it to predict the Y value
+
+We now have to save the model. We do that using a timestamp. So we'll import time, get the current time stamp, and save the model and the path /tmp/saved_models/ followed by the timestamp. 
+Then we use a command to convert a saved model,previously saved in tensorflowjs format, and its called model.json
+
+SEE THIS VIDEO AGAIN LATER. ITS THE 4MIN VIDEO IN THE 3RD WEEK OF THE COURSE 'BROWSER BASED MODELS WITH TENSORFLOW JS'
+
+All this is in the ipynb file.
+
+After saving the model, open the linear.html file in the same directory as the ipynb file.
