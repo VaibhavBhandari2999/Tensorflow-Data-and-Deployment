@@ -46,3 +46,7 @@ SEE THIS VIDEO AGAIN LATER. ITS THE 4MIN VIDEO IN THE 3RD WEEK OF THE COURSE 'BR
 All this is in the ipynb file.
 
 After saving the model, open the linear.html file in the same directory as the ipynb file.
+
+________________________________________________________________________________________________________________________________________________________________________________________________________________________________________
+
+For the exercise, we need to download WGET from https://eternallybored.org/misc/wget/
