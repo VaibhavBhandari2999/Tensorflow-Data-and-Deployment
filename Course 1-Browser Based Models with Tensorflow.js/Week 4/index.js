@@ -66,7 +66,7 @@ function handleButton(elem){
 	}
 	label = parseInt(elem.id);//We'll then extract the label from the ID by converting it into int
 	const img = webcam.capture();//We'll capture the content from our webcam so we can extract the features. This is the main steo where we take in the image, before this we j=have just identified for which class we're taking in the image
-	dataset.addExample(mobilenet.predict(img), label);//The addExample function is in the dataset class present in rps-dataset.js file. We dont add the image captured from webcam to the dataset. Instead, we add the prediction of that image from the MobileNet.
+	dataset.addExample(mobilenet.predict(img), label);//The addExample function is in the dataset class present in rps-dataset.js file. We dont add the image captured from webcam to the dataset. Instead, we add the prediction of that image from the MobileNet. We add a example to the dataset, here an example is the image, and its classification, which we give by clicking one of the 3 buttons while capturing a frame
 
     //*******************************We were doing the transfer learning by removing the bottom layers from the MobileNet, truncating it, so that we just want its output to be the features learned at a higher level. If we then predict on the truncated one, then that's the output that we'll get. So we can train another neural network on those features instead of the raw webcam data and we'll effectively/basically have transfer learning. We then also pass the label to the dataset. Also, the label is a zero, a one, or a two. It's not one-hot encoded.
 }
@@ -112,7 +112,7 @@ async function predict() {
   }
 }
 
-
+//The doTraining button will call this function which then calls the train function to train the dataset
 function doTraining(){
 	train();
 }
