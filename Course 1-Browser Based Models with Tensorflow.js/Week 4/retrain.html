@@ -2,14 +2,20 @@
 <head>
 <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest"> </script><!-- Get latest Tensorflow.js -->
 <script src="webcam.js"></script><!-- Links to a webcam.js script. Its open sourced by Google as a library that manages the webcam in a browser. In particular for capturing images and converting them to tensors to make the project a bit easier -->
-<script src="rps-dataset.js"></script>
+<script src="rps-dataset.js"></script> <!-- Script to load dataset class is in the rps-dataset.js file -->
 </head>
 <body>
 	<div>
 		<div>
-			<video autoplay playsinline muted id="wc" width="224" height="224"></video>
+			<video autoplay playsinline muted id="wc" width="224" height="224"></video> <!-- This video tag defines a video area on the page, and it's given the id wc (we have the id WC in the index.js file which is a const for a webcam object which is stored in Webcam.js)-->
 		</div>
 	</div>
+	
+	<!-- We have 3 buttons here to capture the samples and 3 output divs to render the number of samples that have been captured for each, and then another button to start the training -->
+	
+	<!-- ********************************* Each of the three buttons for gathering data share the same handleButton(this) as their onClick event handler(handleButton is a function defined in the index.js file). So when we look at this function, we'll see that it tells the difference between buttons based off of their ID, which we can see is zero for rock, one for paper and two for scissors. We also named the divs that will be used for outputting the number of samples collected as rock samples, paper samples and scissor samples respectively ***********************************************-->
+	
+	<!-- Finally when the training button is clicked, we'll call the doTraining() function, whcih is afunction defined in the index.js file. -->
 	<button type="button" id="0" onclick="handleButton(this)" >Rock</button>
 	<button type="button" id="1" onclick="handleButton(this)" >Paper</button>
 	<button type="button" id="2" onclick="handleButton(this)" >Scissors</button>
@@ -17,11 +23,13 @@
 	<div id="papersamples">Paper Samples:</div>
 	<div id="scissorssamples">Scissors Samples:</div>
 	<button type="button" id="train" onclick="doTraining()" >Train Network</button>
+	
+	<!-- This will be to add a div with basic instructions, a button to start the inference, and another to end the inference, and then a div with which to output the results. For the button that starts the inference, we'll create one and wire it up to the start predictions function in JavaScript. We'll do the same for stop predicting, and these methods will output to the div with predictions that we've just simply named 'prediction'. -->
 	<div id="dummy">Once training is complete, click 'Start Predicting' to see predictions, and 'Stop Predicting' to end</div>
 	<button type="button" id="startPredicting" onclick="startPredicting()" >Start Predicting</button>
 	<button type="button" id="stopPredicting" onclick="stopPredicting()" >Stop Predicting</button>
 	<div id="prediction"></div>
 </body>
 
-<script src="index.js"></script>
+<script src="index.js"></script><!-- This file 'index.js' is where we'll write most of our code. It will also initizalize the webcam -->
 </html>

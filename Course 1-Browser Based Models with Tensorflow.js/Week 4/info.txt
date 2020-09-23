@@ -20,3 +20,30 @@ The type of transfer learning being used in this project(its not the conventiona
 	At prediction time, we'll then get a prediction from our truncated mobile net up to the layer that we wanted to give us a set of embeddings. 
 	We'll then pass those embeddings through the new model in order to get a prediction that the new model was trained on. 
 
+___________________________________________________________________________________________________
+
+Now, we'll capture the samples, encode them for training and then train the NN with the transfered features of Mobilenet.
+Here, we'll make changes to the retrain.html file which will help us capture the video
+
+The handleButton() in the retrain.html file is defined in the index.js file. That is the function we use to take in the image and the class its for.
+
+****************We were doing the transfer learning by removing the bottom layers from the MobileNet, truncating it, so that we just want its output 
+to be the features learned at a higher level. If we then predict on the truncated one, then that's the output that we'll get. So we can train another 
+neural network on those features instead of the raw webcam data and we'll effectively/basically have transfer learning. We then also pass the label to 
+the dataset. Also, the label is a zero, a one, or a two. It's not one-hot encoded.******************
+
+___________________________________________________________________________________________________
+
+To run the project, make sure all the files(retrain.html, webcam.js, rps-dataset.js, index.js) are in the same folder.
+1) Then open the Web Server for Chrome Application and select this folder.
+2) Click on the URL given below that button (https://127.0.0.1:8887)
+3) When the folder opens in chrome, open the retrain.html file(open it throught the chrome URL from the previous step, not double clicking on it via the windows file explorer)
+4) Allow permission for the page to capture your webcam. Your live webcam video will then be visible on the top left of the screen.
+5) Make a rock shape with your hand, and start clicking on the 'Rock' button 50 times(your wish) to capture the images. Move your hand around at the same time to get different angles and positions.
+6) Do the same for Paper and Scissors.
+7) Once the images have been captured, click on the 'Train Network' button. Open the Developer Console to see the loss functions being printed.
+8) Once the training is over, click on the 'Start Predicting' button, and show a symbol(Rock/Paper/Scissors) to the webcam. The classified shape will be displayed in the page(classified as either Rock or Paper or Scissors).
+9) Once you have clicked the 'Start Predicting' button, you can change shapes any time, a different classification will be displayed in live, without lag.
+10) Click the 'Stop Predicting button' to stop predictions.
+
+Note- Once the developer console is opened, if there is a round blop on the screen and not a cursor to click, click on the 'Toggle Device Toolbar' button in the Developer console(located in the top-left). This will enable mouse clicking while the Dev Console is also open.
